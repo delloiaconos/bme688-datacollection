@@ -209,6 +209,7 @@ __marimo__/
 
 # Submodules
 *.diff
+*.sqlite3
 
 software/bme-logger
 software/.env
