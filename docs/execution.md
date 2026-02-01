@@ -45,3 +45,32 @@ Get last 10 measures:
 ```bash
 sqlite3 measures.sqlite3 "SELECT * FROM measures ORDER BY measid DESC LIMIT 10;"
 ```
+
+### Export to CSV
+
+Export a whole table to CSV:
+```bash
+sqlite3 -header -csv measures.sqlite3 "SELECT * FROM measures;" > measures.csv
+```
+
+Export only some columns / filtered rows:
+```bash
+sqlite3 -header -csv measures.sqlite3 \
+  "SELECT timestamp_utc, host, sensor_id, temperature, humidity, pressure
+   FROM measures
+   WHERE host='raspi1'
+   ORDER BY timestamp_ms;" > filtered.csv
+```
+
+### Interactive Mode
+
+Export with the interactive example (this is not suggested for long outputs):
+```bash
+sqlite3 measures.sqlite3
+sqlite> .headers on
+sqlite> .mode csv
+sqlite> .output measures.csv
+sqlite> SELECT * FROM measures;
+sqlite> .output stdout
+sqlite> .quit
+```

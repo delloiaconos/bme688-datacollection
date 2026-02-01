@@ -209,7 +209,11 @@ __marimo__/
 
 # Submodules
 *.diff
-*.sqlite3
 
+# Acquisition Files
+*.sqlite3
+*.csv
+
+# Execution environment files
 software/bme-logger
 software/.env
