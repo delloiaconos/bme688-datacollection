@@ -135,7 +135,8 @@ check_bme_logger() {
 create_logger_service() {
     print_info "Creating $LOGGER_SERVICE..."
     
-    cat > "$SYSTEMD_DIR/$LOGGER_SERVICE" <<EOF
+    # Create the service file with proper escaping
+    cat > "$SYSTEMD_DIR/$LOGGER_SERVICE" <<'EOF_HEADER'
 [Unit]
 Description=BME688 Sensor Data Logger and MQTT Publisher
 After=network.target mosquitto.service
@@ -143,9 +144,15 @@ Wants=mosquitto.service
 
 [Service]
 Type=simple
+EOF_HEADER
+    
+    cat >> "$SYSTEMD_DIR/$LOGGER_SERVICE" <<EOF
 User=$SERVICE_USER
 WorkingDirectory=$SCRIPT_DIR
-ExecStart=/bin/bash -c 'stdbuf -oL $BME_LOGGER_PATH | python3 $PYTHON_PUBLISHER --quiet --host $MQTT_HOST --port $MQTT_PORT --topic-prefix "$MQTT_TOPIC_PREFIX"'
+ExecStart=/bin/bash -c 'stdbuf -oL "$BME_LOGGER_PATH" | python3 "$PYTHON_PUBLISHER" --quiet --host "$MQTT_HOST" --port "$MQTT_PORT" --topic-prefix "$MQTT_TOPIC_PREFIX"'
+EOF
+    
+    cat >> "$SYSTEMD_DIR/$LOGGER_SERVICE" <<'EOF_FOOTER'
 Restart=on-failure
 RestartSec=10
 StandardOutput=journal
@@ -157,7 +164,7 @@ PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
-EOF
+EOF_FOOTER
     
     print_info "Created $LOGGER_SERVICE"
 }
@@ -165,7 +172,8 @@ EOF
 create_collector_service() {
     print_info "Creating $COLLECTOR_SERVICE..."
     
-    cat > "$SYSTEMD_DIR/$COLLECTOR_SERVICE" <<EOF
+    # Create the service file with proper escaping
+    cat > "$SYSTEMD_DIR/$COLLECTOR_SERVICE" <<'EOF_HEADER'
 [Unit]
 Description=BME688 MQTT to SQLite Data Collector
 After=network.target mosquitto.service bme688-logger.service
@@ -173,9 +181,15 @@ Wants=mosquitto.service
 
 [Service]
 Type=simple
+EOF_HEADER
+    
+    cat >> "$SYSTEMD_DIR/$COLLECTOR_SERVICE" <<EOF
 User=$SERVICE_USER
 WorkingDirectory=$SCRIPT_DIR
-ExecStart=python3 $PYTHON_COLLECTOR --quiet --host $MQTT_HOST --port $MQTT_PORT --db $DB_PATH --topic "$MQTT_TOPIC_PREFIX/#"
+ExecStart=python3 "$PYTHON_COLLECTOR" --quiet --host "$MQTT_HOST" --port "$MQTT_PORT" --db "$DB_PATH" --topic "$MQTT_TOPIC_PREFIX/#"
+EOF
+    
+    cat >> "$SYSTEMD_DIR/$COLLECTOR_SERVICE" <<'EOF_FOOTER'
 Restart=on-failure
 RestartSec=10
 StandardOutput=journal
@@ -187,7 +201,7 @@ PrivateTmp=true
 
 [Install]
 WantedBy=multi-user.target
-EOF
+EOF_FOOTER
     
     print_info "Created $COLLECTOR_SERVICE"
 }
