@@ -1,21 +1,25 @@
-## BME688 Logger
+# Installation Instructions
+
+## System Requirements
+
+### C/C++ Development suite
+
 ```bash
-# Move to bme688 logger directory
-cd software/bme688-linux
-
-# Update submodules
-git submodule update
-
-# Compile the project
-make 
-
-# Copy executable
-cp out/bme-logger ../
-
+sudo apt update
+sudo apt install -y build-essential cmake
 ```
 
+### SQLite3
+
+This is needed only if you want to read locally generated files.
+
+```bash
+sudo apt install sqlite3
+```
 
 ## Mosquitto
+
+It is not needed to install mosquitto locally.
 
 ### Installation
 
@@ -80,3 +84,29 @@ topic # out 0
 # topic # in 0
 ```
 
+
+## BME688 Logger
+
+### Build
+
+```bash
+# Move to bme688 logger directory
+cd software/bme688-linux
+
+# Update submodules
+git submodule update
+
+# Compile the project
+make 
+
+# Copy executable
+cp out/bme-logger ../
+
+```
+
+### Run 
+
+Example run:
+```bash
+./bme-logger 
+```

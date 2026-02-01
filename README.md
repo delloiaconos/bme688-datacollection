@@ -90,33 +90,6 @@ You should see the TCA6408A address appear (address `0x20`).
 
 ---
 
-### 3) Install dependencies
-
-#### C/C++ Development suite
-```bash
-sudo apt update
-sudo apt install -y build-essential cmake
-```
-
-### 4) Build & Run
-
-```bash
-cd software/bme688-linux
-
-make all
-```
-
-Example run:
-```bash
-./bme688_logger 
-```
-
----
-
-## Output Data
-
----
-
 ## Raspberry Pi Auto-Start (Optional)
 
 If you want the logger to start on boot, this repository can include a `systemd` service installer.
