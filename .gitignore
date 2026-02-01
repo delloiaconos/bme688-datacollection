@@ -209,3 +209,6 @@ __marimo__/
 
 # Submodules
 *.diff
+
+software/bme-logger
+software/.env
