@@ -87,14 +87,55 @@ You should see the TCA6408A address appear (address `0x20`).
 
 ## Raspberry Pi Auto-Start (Optional)
 
-If you want the logger to start on boot, this repository can include a `systemd` service installer.
+If you want the logger to start on boot, this repository includes a `systemd` service installer script.
 
-Example:
+The script will install two services:
+- **bme688-logger.service**: Reads BME688 sensor data and publishes to MQTT
+- **bme688-collector.service**: Subscribes to MQTT and stores data in SQLite
+
+### Installation
+
 ```bash
+# Install services with default configuration
 sudo bash software/install_services.sh
+
+# Or with custom MQTT broker
+sudo MQTT_HOST=192.168.1.100 bash software/install_services.sh
+```
+
+### Enable and Start Services
+
+```bash
+# Enable and start the logger service
 sudo systemctl enable bme688-logger
 sudo systemctl start bme688-logger
+
+# Enable and start the collector service
+sudo systemctl enable bme688-collector
+sudo systemctl start bme688-collector
+```
+
+### Check Status and Logs
+
+```bash
+# Check service status
 sudo systemctl status bme688-logger
+sudo systemctl status bme688-collector
+
+# View real-time logs
+sudo journalctl -u bme688-logger -f
+sudo journalctl -u bme688-collector -f
+```
+
+### Uninstall Services
+
+```bash
+sudo bash software/install_services.sh --uninstall
+```
+
+For more options and configuration, run:
+```bash
+bash software/install_services.sh --help
 ```
 
 ---
