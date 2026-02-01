@@ -1,0 +1,27 @@
+[Unit]
+Description=Stream Publisher (BME688 -> MQTT)
+After=mosquitto.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+
+# Adjust these:
+#User=pi
+#Group=pi
+WorkingDirectory=/opt/bme
+
+# Run using the venv interpreter
+ExecStart=/bin/bash -lc 'exec stdbuf -oL /opt/bme/bme-logger | /opt/bme/env/bin/python /opt/bme/stream_publisher.py --quiet --topic-prefix "measures/$(hostname)"'
+
+Restart=on-failure
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+
+# Optional: send stdout/stderr to journal (default anyway)
+StandardOutput=journal
+StandardError=journal
+StandardInput=stdin
+
+[Install]
+WantedBy=multi-user.target
