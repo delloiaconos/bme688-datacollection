@@ -1,3 +1,20 @@
+## BME688 Logger
+```bash
+# Move to bme688 logger directory
+cd software/bme688-linux
+
+# Update submodules
+git submodule update
+
+# Compile the project
+make 
+
+# Copy executable
+cp out/bme-logger ../
+
+```
+
+
 ## Mosquitto
 
 ### Installation
