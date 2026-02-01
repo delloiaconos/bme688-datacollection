@@ -85,13 +85,13 @@ You should see the TCA6408A address appear (address `0x20`).
 
 ---
 
-## TODO: Raspberry Pi Auto-Start (Optional)
+## Raspberry Pi Auto-Start (Optional)
 
 If you want the logger to start on boot, this repository can include a `systemd` service installer.
 
 Example:
 ```bash
-sudo bash software/scripts/install_service.sh
+sudo bash software/install_services.sh
 sudo systemctl enable bme688-logger
 sudo systemctl start bme688-logger
 sudo systemctl status bme688-logger
