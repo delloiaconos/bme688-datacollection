@@ -30,16 +30,11 @@ It includes the required source code (and/or submodules) and step-by-step instru
 ├── hardware/
 │   └── pcb/                       # schematics, gerbers, CAD, etc.
 ├── software/
-│   ├── logger/                    # main acquisition application
-│   ├── drivers/                   # vendor/third-party drivers (or submodule)
+│   ├── bme688-linux/              # main BME688 acquisition application (submodule)
 │   ├── scripts/                   # run helpers, service installer, etc.
 │   └── README.md                  # build/run details (if needed)
 └── .gitmodules                    # git submodules 
 ```
-
-> If your repository uses different folders, update this section to match your layout.
-
----
 
 ## Quick Start
 
@@ -90,11 +85,11 @@ You should see the TCA6408A address appear (address `0x20`).
 
 ---
 
-## Raspberry Pi Auto-Start (Optional)
+## TODO: Raspberry Pi Auto-Start (Optional)
 
 If you want the logger to start on boot, this repository can include a `systemd` service installer.
 
-Example (if provided):
+Example:
 ```bash
 sudo bash software/scripts/install_service.sh
 sudo systemctl enable bme688-logger
