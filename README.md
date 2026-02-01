@@ -24,15 +24,17 @@ It includes the required source code (and/or submodules) and step-by-step instru
 ```
 .
 ├── README.md
-├── docs/
+├── docs/                          # documentation
 │   ├── setup.md
 │   └── connections.md
 ├── hardware/
 │   └── pcb/                       # schematics, gerbers, CAD, etc.
 ├── software/
 │   ├── bme688-linux/              # main BME688 acquisition application (submodule)
-│   ├── scripts/                   # run helpers, service installer, etc.
-│   └── README.md                  # build/run details (if needed)
+│   ├── scripts/                   # python scripts, etc.
+│   ├── services/                  # services description, etc.
+│   └── install_services.sh        # Install all the services and requirements.
+├── .gitignore                     # git ignore
 └── .gitmodules                    # git submodules 
 ```
 
@@ -92,9 +94,16 @@ If you want the logger to start on boot, this repository can include a `systemd`
 Example:
 ```bash
 sudo bash software/install_services.sh
-sudo systemctl enable bme688-logger
-sudo systemctl start bme688-logger
-sudo systemctl status bme688-logger
+
+sudo systemctl daemon-reload
+
+#sudo systemctl enable bme-publisher
+sudo systemctl start bme-publisher
+sudo systemctl status bme-publisher
+
+#sudo systemctl enable bme-collector
+sudo systemctl start bme-collector
+sudo systemctl status bme-collector
 ```
 
 ---

@@ -1,0 +1,27 @@
+[Unit]
+Description=MQTT Collector (MQTT -> SQLite3)
+Wants=network-online.target
+After=mqtt-collector.service
+
+[Service]
+Type=simple
+
+# Adjust these:
+#User=pi
+#Group=pi
+WorkingDirectory=/opt/bme
+
+# Run using the venv interpreter
+ExecStart=/bin/bash -lc 'exec /opt/bme/env/bin/python /opt/bme/mqtt_to_sqlite.py --quiet'
+
+Restart=on-failure
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+
+# Optional: send stdout/stderr to journal (default anyway)
+StandardOutput=journal
+StandardError=journal
+StandardInput=stdin
+
+[Install]
+WantedBy=multi-user.target
