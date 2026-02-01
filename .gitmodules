@@ -1,3 +1,6 @@
 [submodule "bme688-linux"]
 	path = bme688-linux
 	url = https://github.com/delloiaconos/bme688-linux.git
+[submodule "software/bme688-linux"]
+	path = software/bme688-linux
+	url = https://github.com/delloiaconos/bme688-linux.git
