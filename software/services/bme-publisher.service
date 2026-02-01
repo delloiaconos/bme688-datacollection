@@ -12,7 +12,7 @@ Type=simple
 WorkingDirectory=/opt/bme
 
 # Run using the venv interpreter
-ExecStart=/bin/bash -lc 'exec stdbuf -oL /opt/bme/bme-logger | /opt/bme/env/bin/python /opt/bme/stream_publisher.py --quiet --topic-prefix "measures/$(hostname)"'
+ExecStart=/bin/bash /opt/bme/bme-publisher.sh
 
 Restart=on-failure
 RestartSec=2

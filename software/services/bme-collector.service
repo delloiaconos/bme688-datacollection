@@ -11,8 +11,9 @@ Type=simple
 #Group=pi
 WorkingDirectory=/opt/bme
 
-# Run using the venv interpreter
-ExecStart=/bin/bash -lc 'exec /opt/bme/env/bin/python /opt/bme/mqtt_to_sqlite.py --quiet'
+
+# Don't fail if the file doesn't exist *yet*
+ExecStart=/bin/bash /opt/bme/bme-collector.sh
 
 Restart=on-failure
 RestartSec=2
