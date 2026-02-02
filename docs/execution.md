@@ -28,6 +28,14 @@ stdbuf -oL ./bme-logger | python3 stream_publisher.py --quiet --topic-prefix "me
 
 This pipeline runs your logger and sends each line it prints to the MQTT sender, with low latency and host-specific topics.
 
+## Testing
+
+once the services have been started, in order to check if the stream publisher is working:
+
+```bash
+mosquitto_sub -h 127.0.0.1 -t "measures/#"
+```
+
 
 ## Data Collection
 
