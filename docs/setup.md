@@ -2,10 +2,17 @@
 
 ## System Requirements
 
+
+### System Upgrade
+
+```bash
+sudo apt install -y build-essential cmake
+```
+
 ### C/C++ Development suite
 
 ```bash
-sudo apt update
+sudo apt install -y git
 sudo apt install -y build-essential cmake
 ```
 
@@ -14,7 +21,7 @@ sudo apt install -y build-essential cmake
 This is needed only if you want to read locally generated files.
 
 ```bash
-sudo apt install sqlite3
+sudo apt install -y sqlite3
 ```
 
 ## Mosquitto
@@ -24,8 +31,13 @@ It is not needed to install mosquitto locally.
 ### Installation
 
 ```bash
-sudo apt update
 sudo apt install mosquitto mosquitto-clients
+```
+
+
+### Enable Mosquitto Service
+
+```bash
 sudo systemctl enable mosquitto
 ```
 
@@ -41,7 +53,8 @@ listener 1883 127.0.0.1
 allow_anonymous true
 ```
 
-In order to restart mosquitto, it is possible to run the following command:
+In order to apply changes, mosquitto service must be restarted.
+To restart the service run the following command:
 
 ```bash
 sudo systemctl restart mosquitto
@@ -85,7 +98,7 @@ topic # out 0
 ```
 
 
-## BME688 Logger
+## BME688 Linux Software!
 
 ### Build
 
@@ -97,16 +110,17 @@ cd software/bme688-linux
 git submodule update
 
 # Compile the project
-make 
+make clean
+make all
 
 # Copy executable
-cp out/bme-logger ../
-
+cp out/bme-grabber /opt/bme
+chmod +x /opt/bme/bme-grabber
 ```
 
 ### Run 
 
 Example run:
 ```bash
-./bme-logger 
+./bme-grabber 
 ```
