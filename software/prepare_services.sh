@@ -2,6 +2,7 @@
 # This script prepares the software for installation as a service.
 
 BASE_DIR="$(pwd -P)"
+DEST_DIR="/opt/bme"
 
 # If a Python virtual environment is already active, exit (deactivate) it.
 # This prevents nesting venvs or installing into the wrong environment.
@@ -9,26 +10,30 @@ if [ -n "${VIRTUAL_ENV:-}" ]; then
   deactivate
 fi
 
+
+
 # Create the target installation directory under /opt.
-mkdir -p /opt/bme
+mkdir -p "$DEST_DIR"
 
 # Copy all helper scripts/resources from the local ./scripts directory
 # into the installation directory.
-cp -r $BASE_DIR/scripts/* /opt/bme/
+cp -r $BASE_DIR/scripts/* "$DEST_DIR/"
 
 # Build the project from source and copy the binary to destination.
 cd $BASE_DIR/bme688-linux
 make clean
 make all
-cp ./out/bme-logger /opt/bme/
+cp ./out/bme-logger "$DEST_DIR/"
 # Ensure executable permission.
-chmod +x /opt/bme/bme-logger
+chmod +x "$DEST_DIR/bme-logger"
 
 
 # Move into the installation directory
-cd /opt/bme/
+cd "$DEST_DIR"
 
 # Create a Python virtual environment named and install requirements
 python3 -m venv env
 source env/bin/activate
 pip install -r requirements.txt
+
+rm requirements.txr

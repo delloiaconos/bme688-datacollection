@@ -17,7 +17,6 @@ echo "Installing 'bme-publisher' service"
 #cp ./bme-publisher.service "$DEST_DIR/bme-publisher.service"
 sudo install -m 0644 $BASE_DIR/services/bme-publisher.service /etc/systemd/system/bme-publisher.service
 
-
 echo "Installing 'bme-collector' service"
 #cp ./bme-collector.service "$DEST_DIR/bme-collector.service"
 sudo install -m 0644 $BASE_DIR/services/bme-collector.service /etc/systemd/system/bme-collector.service
