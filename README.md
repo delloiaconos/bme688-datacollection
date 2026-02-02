@@ -1,4 +1,4 @@
-# Bosch BME688 Raspberry Pi Data Logger (Custom PCB)
+# Bosch BME688 Raspberry Pi Data Logger
 
 This repository provides a complete workflow to collect sensor data from a **Bosch Sensortec BME688 Development Board** connected to a **Raspberry Pi**.  
 It includes the required source code (and/or submodules) and step-by-step instructions to configure the Raspberry Pi and start logging measurements.
@@ -25,8 +25,13 @@ It includes the required source code (and/or submodules) and step-by-step instru
 .
 ├── README.md
 ├── docs/                          # documentation
+│   ├── execution.md
+│   ├── notes.md
+│   ├── services.md
 │   ├── setup.md
-│   └── connections.md
+│   ├── telegraf.md
+│   ├── telegraf.md
+│   └── troubleshooting.md
 ├── hardware/
 │   └── pcb/                       # schematics, gerbers, CAD, etc.
 ├── software/
@@ -44,15 +49,12 @@ It includes the required source code (and/or submodules) and step-by-step instru
 
 ```bash
 git clone --recurse-submodules https://github.com/delloiaconos/bme688-datacollection.git
-cd bme688-datacollection
 ```
 
-If you already cloned without submodules:
+If you already cloned without submodules, from `bme688-datacollection` directory:
 ```bash
 git submodule update --init --recursive
 ```
-
----
 
 ### 2) Configure Raspberry Pi (I²C)
 
@@ -93,7 +95,9 @@ If you want the logger to start on boot, this repository can include a `systemd`
 
 Example:
 ```bash
-sudo bash software/install_services.sh
+cd software
+sudo bash prepare_services.sh
+sudo bash install_services.sh
 
 sudo systemctl daemon-reload
 
