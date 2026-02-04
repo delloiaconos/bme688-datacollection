@@ -206,6 +206,63 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
+# ===== MATLAB / Simulink =====
+
+# Autosave / backup
+*.asv
+*.m~
+*.mex*
+*.pdb
+*.old
+*.orig
+*.bak
+*.swp
+*.tmp
+
+# Compiled / generated
+*.p
+*.mexw64
+*.mexmaci64
+*.mexa64
+
+# MATLAB code generation / build artifacts
+slprj/
+codegen/
+*_ert_rtw/
+*_grt_rtw/
+*.slxc
+
+# Simulink cache / derived data
+**/*.slxc
+**/*.slx.r*
+**/*.mdl.r*
+*.autosave
+*.cache
+
+# Figures / live scripts autosave
+*.fig.bak
+*.mlx.autosave
+*.mldatx
+
+# MATLAB project files (usually keep these!)
+# Uncomment if you DON'T want to track projects:
+# *.prj
+# *.mlproj
+
+# MATLAB preferences / user-specific
+*.pref*
+*.matlab
+*.log
+
+# Test / coverage (if you generate these)
+coverage/
+test-results/
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
 
 # Submodules
 *.diff
