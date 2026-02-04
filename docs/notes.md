@@ -17,7 +17,7 @@ mosquitto_pub -h 127.0.0.1 -t "test/topic" -m "Hello Localhost"
 
 
 ```bash
-stdbuf -oL ./bme-logger | mosquitto_pub -h 127.0.0.1 -t "test/topic" -l
+stdbuf -oL ./bme-grabber | mosquitto_pub -h 127.0.0.1 -t "test/topic" -l
 ```
 
 Details:

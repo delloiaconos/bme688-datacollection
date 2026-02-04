@@ -23,10 +23,10 @@ For each input line, it:
 Invalid lines (bad JSON / missing fields / publish errors) are logged to stderr and the program continues processing the next line.
 
 ```bash
-stdbuf -oL ./bme-logger | python3 stream_publisher.py --quiet --topic-prefix "measures/$(hostname)"
+stdbuf -oL ./bme-grabber | python3 stream_publisher.py --quiet --topic-prefix "measures/$(hostname)"
 ```
 
-This pipeline runs your logger and sends each line it prints to the MQTT sender, with low latency and host-specific topics.
+This pipeline runs your BME grabber software and sends each line it prints to the MQTT sender, with low latency and host-specific topics.
 
 ## Testing
 
@@ -66,7 +66,7 @@ Export only some columns / filtered rows:
 sqlite3 -header -csv measures.sqlite3 \
   "SELECT timestamp_utc, host, sensor_id, temperature, humidity, pressure
    FROM measures
-   WHERE host='raspi1'
+   WHERE host='rpi1'
    ORDER BY timestamp_ms;" > filtered.csv
 ```
 

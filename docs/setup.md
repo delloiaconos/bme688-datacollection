@@ -2,14 +2,14 @@
 
 ## System Requirements
 
-
 ### System Upgrade
 
 ```bash
-sudo apt install -y build-essential cmake
+sudo apt update -y
+sudo apt upgrade -y
 ```
 
-### C/C++ Development suite
+### Install C/C++ Development suite
 
 ```bash
 sudo apt install -y git
@@ -22,6 +22,13 @@ This is needed only if you want to read locally generated files.
 
 ```bash
 sudo apt install -y sqlite3
+```
+
+### Enable I2C and SPI
+
+```bash
+sudo raspi-config nonint do_spi 0 
+sudo raspi-config nonint do_i2c 0
 ```
 
 ## Mosquitto
@@ -124,3 +131,4 @@ Example run:
 ```bash
 ./bme-grabber 
 ```
+
