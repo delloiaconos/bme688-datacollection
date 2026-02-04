@@ -25,15 +25,9 @@ It includes the required source code (and/or submodules) and step-by-step instru
 .
 ├── README.md
 ├── docs/                          # documentation
-│   ├── execution.md
-│   ├── notes.md
-│   ├── services.md
-│   ├── setup.md
-│   ├── telegraf.md
-│   ├── telegraf.md
-│   └── troubleshooting.md
 ├── hardware/
 │   └── pcb/                       # schematics, gerbers, CAD, etc.
+├── processing/                    # post processing scripts (mix of Python and MATLAB)
 ├── software/
 │   ├── bme688-linux/              # main BME688 acquisition application (submodule)
 │   ├── scripts/                   # python scripts, etc.
@@ -62,9 +56,18 @@ Enable I²C:
 ```bash
 sudo raspi-config
 ```
-Navigate to: **Interface Options → I2C → Enable**
+Navigate to: 
+- **Interface Options → I2C → Enable**
+- **Interface Options → SPI → Enable**
 
-Reboot:
+You can also run a single command to enable the two interfaces:
+
+```bash
+sudo raspi-config nonint do_spi 0 
+sudo raspi-config nonint do_i2c 0
+```
+
+To enable the interfaces it is needed a reboot:
 ```bash
 sudo reboot
 ```
@@ -74,7 +77,7 @@ After reboot, verify the I²C device nodes exist:
 ls /dev/i2c-*
 ```
 
-Install I²C tools (useful for debugging):
+It is recomended to install I²C tools (useful for debugging):
 ```bash
 sudo apt update
 sudo apt install -y i2c-tools
@@ -115,7 +118,6 @@ sudo systemctl status bme-collector
 ## Documentation
 
 - **Raspberry Pi setup:** `docs/setup.md`
-- **Custom PCB wiring/connection map:** `docs/connections.md` (or `hardware/pcb/`)
 - **Notes:** `docs/notes.md`
 - **Troubleshooting:** `docs/troubleshooting.md`
 
