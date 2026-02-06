@@ -1,3 +1,7 @@
 [submodule "software/bme688-linux"]
 	path = software/bme688-linux
 	url = https://github.com/delloiaconos/bme688-linux.git
+
+[submodule "processing/matlab-utilies"]
+	path = processing/matlab-utilies
+	url = https://github.com/delloiaconos/matlabUtilities.git
