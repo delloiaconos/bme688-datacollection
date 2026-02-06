@@ -4,3 +4,6 @@
 [submodule "processing/matlab-utilies"]
 	path = processing/matlab-utilies
 	url = https://github.com/delloiaconos/matlabUtilities.git
+[submodule "processing/matlab-mplot"]
+	path = processing/matlab-mplot
+	url = https://github.com/delloiaconos/mplotUtility.git
