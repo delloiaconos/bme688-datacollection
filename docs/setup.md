@@ -5,7 +5,7 @@
 ### System Upgrade
 
 ```bash
-sudo apt update -y
+sudo apt update
 sudo apt upgrade -y
 ```
 
@@ -38,7 +38,7 @@ It is not needed to install mosquitto locally.
 ### Installation
 
 ```bash
-sudo apt install mosquitto mosquitto-clients
+sudo apt install -y mosquitto mosquitto-clients
 ```
 
 
