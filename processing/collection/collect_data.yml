@@ -1,0 +1,115 @@
+---
+
+
+- name: Collect /opt/bme/data from hosts
+  hosts: bme_hosts
+  strategy: free
+  become: true
+  gather_facts: true
+
+  vars:
+    service_name: bme-collector
+    data_dir: /opt/bme/data
+    local_out_dir: "{{ playbook_dir }}/collected"
+    ansible_scp_if_ssh: true
+  
+  tasks:
+    - name: Ensure local output directory exists
+      ansible.builtin.file:
+        path: "{{ local_out_dir }}"
+        state: directory
+        mode: "0755"
+      delegate_to: localhost
+      run_once: true
+      become: false
+
+    - name: Check if /dev/shm exists on remote
+      ansible.builtin.stat:
+        path: /dev/shm
+      register: shm_stat
+
+    - name: Pick remote temp directory
+      ansible.builtin.set_fact:
+        remote_tmp_dir: "/tmp"
+
+    - name: Build zip name using timestamp + hostname
+      ansible.builtin.set_fact:
+        zip_stamp: "{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}{{ ansible_date_time.second }}"
+        zip_name: "{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}{{ ansible_date_time.second }}_{{ ansible_hostname }}.zip"
+        remote_zip: "{{ remote_tmp_dir }}/{{ ansible_date_time.year }}{{ ansible_date_time.month }}{{ ansible_date_time.day }}{{ ansible_date_time.hour }}{{ ansible_date_time.minute }}{{ ansible_date_time.second }}_{{ ansible_hostname }}.zip"
+
+    - name: Stop service (and still restart later even if something fails)
+      ansible.builtin.systemd:
+        name: "{{ service_name }}"
+        state: stopped
+
+    - block:
+        - name: Verify data directory exists
+          ansible.builtin.stat:
+            path: "{{ data_dir }}"
+          register: data_stat
+
+        - name: Fail if /opt/bme/data is missing
+          ansible.builtin.fail:
+            msg: "Data directory {{ data_dir }} does not exist on {{ inventory_hostname }}"
+          when: not data_stat.stat.exists
+
+        # Requires: community.general collection (see notes below).
+        - name: Zip all files under /opt/bme/data into remote tmp
+          community.general.archive:
+            path: "{{ data_dir }}/"
+            dest: "{{ remote_zip }}"
+            format: zip
+
+        - name: Compute remote MD5 of the zip
+          ansible.builtin.stat:
+            path: "{{ remote_zip }}"
+            checksum_algorithm: md5
+          register: remote_zip_stat
+
+        - name: Fetch zip to local machine
+          ansible.builtin.fetch:
+            src: "{{ remote_zip }}"
+            dest: "{{ local_out_dir }}/"
+            flat: true
+          register: fetch_result
+          throttle: 1
+
+        - name: Compute local MD5 of fetched zip
+          ansible.builtin.stat:
+            path: "{{ local_out_dir }}/{{ zip_name }}"
+            checksum_algorithm: md5
+          delegate_to: localhost
+          become: false
+          register: local_zip_stat
+
+        - name: Compare MD5 (fail if mismatch)
+          ansible.builtin.assert:
+            that:
+              - remote_zip_stat.stat.checksum == local_zip_stat.stat.checksum
+            fail_msg: >-
+              MD5 mismatch for {{ zip_name }}:
+              remote={{ remote_zip_stat.stat.checksum }},
+              local={{ local_zip_stat.stat.checksum }}
+            success_msg: >-
+              MD5 OK for {{ zip_name }}: {{ remote_zip_stat.stat.checksum }}
+
+        - name: Remove remote zip
+          ansible.builtin.file:
+            path: "{{ remote_zip }}"
+            state: absent
+
+      always:
+        - name: Restart service (always)
+          ansible.builtin.systemd:
+            name: "{{ service_name }}"
+            state: started
+            enabled: true
+
+    - name: Print summary for this host
+      ansible.builtin.debug:
+        msg:
+          host: "{{ inventory_hostname }}"
+          zip: "{{ zip_name }}"
+          remote_md5: "{{ remote_zip_stat.stat.checksum | default('n/a') }}"
+          local_path: "{{ local_out_dir }}/{{ zip_name }}"
